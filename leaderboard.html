@@ -28,19 +28,19 @@
           i++;
         });
       }
-      const getAvg = (a) => {
-        let avg;
+      const getPctg = (a) => {
+        let pctg;
         if (a.wins + a.losses != 0) {
-          avg = a.wins/(a.wins + a.losses);
+          pctg = a.wins/(a.wins + a.losses);
         } else {
-          avg = 0.5
+          pctg = 0.5
         }
-        return avg*100;
+        return pctg*100;
       }
       socket.on('namesOutput', (names) => {
         const namesArray = Object.keys(names);
         namesArray.sort((a, b) => {
-          return getAvg(names[b]) - getAvg(names[a])
+          return getPctg(names[b]) - getPctg(names[a])
         });
         createLeaderboard(namesArray, names);
       });
