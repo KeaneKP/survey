@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+	  <meta name="viewport" content="width=device-width">
+    <title>Survey - Class of 2024</title>
+    <link rel="icon" href="https://icons.iconarchive.com/icons/blackvariant/button-ui-system-apps/256/ActivityMonitor-icon.png" type="image/png" sizes="16x16">
+    <style>
+      * {
+        margin: 0;
+        font-family: Verdana;
+      }
+      body {
+        width: 100%
+      }
+      .matchup {
+        height: 99.9vh;
+        width: 50vw;
+        border: solid 4px black;
+        position: fixed;
+        
+      }
+      .matchupText {
+        position: relative;
+        text-align: center;
+        top: 46vh;
+        font-size: 8vh;
+      }
+      
+      #leftMatchup {
+        background: #7D9CFE;
+      }
+      #rightMatchup {
+        left: 50vw;
+        background: #FEDE7D;
+      }
+      button{
+        position: fixed;
+        font-size: 4vh;
+        border-radius: 10px;
+        border: solid 4px black;
+      }
+      #passButton {
+        left: 45vw;
+        width: 10vw;
+        top: 22vh;
+        height: 6vh;
+      }
+      #resultsButton {
+        left: 35vw;
+        width: 30vw;
+        top: 69vh;
+        height: 12vh;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="/socket.io/socket.io.js"></script>
+    <div class="matchup" id="leftMatchup"onClick="submitMatchup(true);"><p class="matchupText" id="leftMatch">BRuh</p></div>
+    <div class="matchup" id="rightMatchup" onClick="submitMatchup(false);"><p class="matchupText" id="rightMatch">Brub</p></div>
+    <button id="passButton" onClick="setMatchup();">Skip</button>
+    <a href="/leaderboard"><button id="resultsButton">View Current Leaderboard</button></a>
+    <script>
+      console.log('Bro If You Are looking In Here Trying To Find A Way To Hack The Leaderboard, How About You Go Out And Actually Get Some Friends You Social Reject.');
+      var socket = io();
+      const names = [
+        "Jace Allen",
+        "Grace Avery",
+        "Ian Barrett",
+        "Owen Barry",
+        "Thomas Barry",
+        "Stephen Bingham-Brooks",
+        "Andrew Blanchard",
+        "Ava Blandin",
+        "Ezra Blasko",
+        "Gabrielle Bolduc",
+        "Chloe Bopp",
+        "Evan Brew",
+        "Christopher Brickhouse",
+        "Christian Burke",
+        "Jordan Cantalupo",
+        "Katherine Capocci",
+        "Nicholas Capocci",
+        "Kathrine Carabin",
+        "Claire Coulton",
+        "Eddie Chapa",
+        "Nathan Clark",
+        "Lilly Cookson",
+        "Thomas Cross",
+        "Ryan Crowley",
+        "Maria Cunha",
+        "Angela DeCarolis",
+        "Colin DeChambeau",
+        "Alexis DeMaio",
+        "Daniel Dennehy",
+        "Gavyn Dernberger",
+        "Hunter Devine",
+        "Grady Dewhurst",
+        "Haley Diaz",
+        "Marchello Diaz",
+        "Logan Doucette",
+        "Matthew Dunbar",
+        "Connor Egan",
+        "Lilia Fagundes",
+        "Owen Fay",
+        "Audrey Fernau",
+        "Schephatia Feron",
+        "Aiden Flaherty",
+        "Christian Francis",
+        "Chantal Gonzales",
+        "Isaiah Halbach",
+        "Samuel Hall",
+        "Thomas Hancock",
+        "Tyler Hartsgrove",
+        "Micheal Hauter",
+        "Timothy Heath",
+        "Patrick Hennesy",
+        "Whispa Hoppe",
+        "Anna Horton",
+        "Kylie Jenkins",
+        "Gage Johnson",
+        "Molly Joy",
+        "Kaden Keane",
+        "Kylie Keenan",
+        "Zoe Kelly",
+        "Connor Kingman",
+        "Connor Kohl",
+        "Chloe Lavigne",
+        "Trayvon Lawson",
+        "Vanessa LePine",
+        "Vanessa Levesque",
+        "Maximus Libby",
+        "Jaden Lovell",
+        "Devin Maibor",
+        "Angus Malinowski",
+        "Isabella Marques",
+        "Hannah McAlpine",
+        "Keira McAlpine",
+        "Ella McCarthy",
+        "Gavin McLoud",
+        "Nicholas Mesheau",
+        "Claire Miga",
+        "Ayden Minson",
+        "Annaliz Morales", 
+        "Calice Morton",
+        "Kian Moura",
+        "Reese Mullaney",
+        "Serena Murray",
+        "Reese Neale",
+        "Zachary Noonan",
+        "McKenna O'Connor",
+        "Sean O'Donoghue",
+        "Amya Oliveira",
+        "Christopher Oman",
+        "Paige Pavidis",
+        "Olivia Pennington",
+        "Madelynn Perry",
+        "Brianna Quill",
+        "Cole Redder",
+        "James Redder",
+        "Riley Richardson",
+        "Rachel Rinker",
+        "Jackson Rix",
+        "Mia Royal",
+        "McKenna Salamone",
+        "Dawn Sances",
+        "Ethan Saraiva",
+        "Brennan Shea",
+        "Sarah Silvia",
+        "Brady Simon",
+        "Derek Smith",
+        "Goncales DaSilva",
+        "Kareena Swinburne",
+        "Gabriel Sypiano",
+        "Simon Teles",
+        "Shawn Thomas",
+        "Aidan Toomey",
+        "Ava Turcotte",
+        "Ian Vieira",
+        "Matthew Werra",
+        "Natalie West",
+        "Bria Williams",
+        "Paul Wolfe",
+        "Braiden Young",
+        "Nicholas Yout"
+      ];
+      
+      const setMatchup = () => {
+        firstName = Math.floor(Math.random()*names.length);
+        secondName = Math.floor(Math.random()*names.length);
+        if (firstName != secondName) {
+          leftMatch.innerHTML = names[firstName];
+          rightMatch.innerHTML = names[secondName];
+        } else {
+          setMatchup();
+        } // BRO IF YOU LOOKING IN HERE TRYING TO FIND A WAY TO HACK THE LEADERBOARD, HOW ABOUT YOU GO OUT AND ACTUALLY GET SOME FRIENDS YOU SOCIAL REJECT.
+      }
+      const submitMatchup = (leftWinner) => {
+        if (leftWinner) {
+          socket.emit('outcome', leftMatch.innerHTML, rightMatch.innerHTML);
+        } else {
+          socket.emit('outcome', rightMatch.innerHTML, leftMatch.innerHTML);
+        }
+        setMatchup();
+      }
+
+      setMatchup();
+    </script>
+  </body>
+</html>

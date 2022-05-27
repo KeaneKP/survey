@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+	  <meta name="viewport" content="width=device-width">
+    <title>Survey - Class of 2024</title>
+    <link rel="icon" href="https://icons.iconarchive.com/icons/blackvariant/button-ui-system-apps/256/ActivityMonitor-icon.png" type="image/png" sizes="16x16">
+  </head>
+  <body>
+    <a href="/">Click to return to main page.</a>
+    <b><p id="leaderboard"></p></b>
+    <a href="/">Click to return to main page.</a>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io();
+      const totalResponses = (names, namesObjects) => {
+        let total = 0;
+        names.forEach((name) => {
+          total += namesObjects[name].wins;
+        });
+        return total;
+      }
+      const createLeaderboard = (names, namesObjects) => {
+        leaderboard.innerHTML = "Data given so far: " + totalResponses(names, namesObjects) + ", The more data is provided, the more accurate the leaderboard will be. <br><br>";
+        let i = 1;
+        names.forEach((name) => {
+          leaderboard.innerHTML += i + ". " + name + " <br>"; 
+          i++;
+        });
+      }
+      const getAvg = (a) => {
+        let avg;
+        if (a.wins + a.losses != 0) {
+          avg = a.wins/(a.wins + a.losses);
+        } else {
+          avg = 0.5
+        }
+        return avg*100;
+      }
+      socket.on('namesOutput', (names) => {
+        const namesArray = Object.keys(names);
+        namesArray.sort((a, b) => {
+          return getAvg(names[b]) - getAvg(names[a])
+        });
+        createLeaderboard(namesArray, names);
+      });
+      socket.emit('namesRequest');
+    </script>
+  </body>
+</html>
